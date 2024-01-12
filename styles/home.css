@@ -1,0 +1,20 @@
+body, html {
+    height: 100%;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    gap: 3rem;
+}
+
+h1 {
+    font-family: 'RickMorty';
+    font-size: 10rem;
+    color: var(--primary);
+    text-shadow: 0.5rem 0 0.6rem var(--accent), 0.6rem 0.1rem 0.6rem var(--secondary), -0.5rem 0 0.6rem var(--accent), -0.6rem 0.1rem 0.6rem var(--secondary), 0 0.5rem 0.6rem var(--accent), 0.1rem 0.6rem 0.6rem var(--secondary), 0 -0.5rem 0.6rem var(--accent), 0.1rem -0.6rem 0.6rem var(--secondary),
+               0.5rem 0.5rem 0.6rem var(--accent), 0.6rem 0.6rem 0.6rem var(--secondary), -0.5rem -0.5rem 0.6rem var(--accent), -0.6rem -0.6rem 0.6rem var(--secondary), 0.5rem -0.5rem 0.6rem var(--accent), 0.6rem -0.6rem 0.6rem var(--secondary), -0.5rem 0.5rem 0.6rem var(--accent), -0.6rem 0.6rem 0.6rem var(--secondary);
+    text-align: center;
+}
