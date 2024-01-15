@@ -28,7 +28,6 @@ section {
   margin: 0;
   padding: 0;
   border: 0;
-  font: inherit;
 }
 
 h1, h2, h3, h4, h5, h6, p, span, a, strong, blockquote, i, b, u, em {
@@ -43,6 +42,7 @@ a {
   text-decoration: none;
   color: inherit;
   font-size: inherit;
+  display: block;
 }
   
 li {
