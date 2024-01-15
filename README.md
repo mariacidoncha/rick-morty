@@ -14,6 +14,9 @@ Day 1: 12/01/2024
 - Add Rick and Morty font
 
 Day 2: 15/01/2024
+- Split episodes in seasons
+- Set button for each season
+- Set side bar menu
 
 # ISSUES
 #### 1. Export/Import statement doesn't work
