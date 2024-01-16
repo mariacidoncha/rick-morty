@@ -1,4 +1,5 @@
 * {
+    font-family: 'Titillium Web', sans-serif;
     font-size: 2rem;
 }
 
@@ -9,7 +10,7 @@ body, html {
 body {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1.5fr 4fr 1.5fr;
+    grid-template-rows: 1fr 4fr 1.5fr;
 }
 
 header {
@@ -19,14 +20,37 @@ header {
     align-items: center;
     
     gap: 3rem;
+    margin-top: 3rem;
 }
 
 h1 {
     font-family: 'RickMorty';
-    font-size: 10rem;
+    font-size: 8rem;
     color: var(--primary);
     text-shadow: 0.5rem 0 0.6rem var(--accent), 0.6rem 0.1rem 0.6rem var(--secondary), -0.5rem 0 0.6rem var(--accent), -0.6rem 0.1rem 0.6rem var(--secondary), 0 0.5rem 0.6rem var(--accent), 0.1rem 0.6rem 0.6rem var(--secondary), 0 -0.5rem 0.6rem var(--accent), 0.1rem -0.6rem 0.6rem var(--secondary),
                0.5rem 0.5rem 0.6rem var(--accent), 0.6rem 0.6rem 0.6rem var(--secondary), -0.5rem -0.5rem 0.6rem var(--accent), -0.6rem -0.6rem 0.6rem var(--secondary), 0.5rem -0.5rem 0.6rem var(--accent), 0.6rem -0.6rem 0.6rem var(--secondary), -0.5rem 0.5rem 0.6rem var(--accent), -0.6rem 0.6rem 0.6rem var(--secondary);
+    text-align: center;
+}
+
+h2 {
+    font-size: 5rem;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 3rem;
+}
+
+h3 > a {
+    text-decoration: underline;
+}
+
+.sidebar > h3 {
+    font-family: 'RickMorty';
+    font-size: 4rem;
+    color: var(--primary);
+    text-shadow: 0.1rem 0 0.2rem var(--accent), 0.2rem 0.1rem 0.2rem var(--secondary), -0.1rem 0 0.2rem var(--accent), -0.2rem 0.1rem 0.2rem var(--secondary), 0 0.1rem 0.2rem var(--accent), 0.1rem 0.2rem 0.2rem var(--secondary), 0 -0.1rem 0.2rem var(--accent), 0.1rem -0.2rem 0.2rem var(--secondary),
+               0.1rem 0.1rem 0.2rem var(--accent), 0.2rem 0.2rem 0.2rem var(--secondary), -0.1rem -0.1rem 0.2rem var(--accent), -0.2rem -0.2rem 0.2rem var(--secondary), 0.1rem -0.1rem 0.2rem var(--accent), 0.2rem -0.2rem 0.2rem var(--secondary), -0.1rem 0.1rem 0.2rem var(--accent), -0.2rem 0.2rem 0.2rem var(--secondary);
     text-align: center;
 }
 
@@ -39,7 +63,46 @@ main {
 }
 
 .accordion-button {
-    font-size: 2rem
+    font-size: 2rem;
+}
+
+.sidebar {
+    padding-top: 3rem;
+    max-height: 50rem;
+    overflow-y:auto;
+    scroll-snap-type: y mandatory;
+}
+
+/* scroll side bar */
+/* Works on Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) var(--primary);
+}
+  
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 1.2rem;
+}
+
+*::-webkit-scrollbar-track {
+    border-radius: 20px;
+    background: var(--primary);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 20px;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--accent);
+    color: var(--primary);
+}
+
+.accordion-button:focus {
+    border-color: transparent;
+    box-shadow: none;
 }
 
 .main__container{
@@ -47,8 +110,40 @@ main {
     flex-direction: column;
     align-items: center;
 
-    gap: 3rem;
-    margin-top: 3rem;
+    gap: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.toHomePage__btn {
+    border: 0.3rem solid var(--accent);
+    position: absolute;
+    right: 5rem;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    z-index: 1;
+    transition: all 250ms;
+    overflow: hidden;
+}
+
+.toHomePage__btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background-color: var(--accent);
+    z-index: -1;
+    transition: all 250ms;
+}
+
+.toHomePage__btn:hover {
+    color: var(--black);
+}
+
+.toHomePage__btn:hover::before {
+    width: 100%;
 }
 
 .episode__btn {
@@ -57,8 +152,6 @@ main {
     border-radius: 15px;
     z-index: 1;
     position: relative;
-    -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
     transition: all 250ms;
     overflow: hidden;
 }
@@ -72,8 +165,6 @@ main {
     width: 0;
     background-color: var(--primary);
     z-index: -1;
-    -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
-    box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
     transition: all 250ms;
 }
 
@@ -85,6 +176,90 @@ main {
     width: 100%;
 }
 
+.card {
+    border-radius: 20px;
+    padding: 2rem;
+    border: 2px solid var(--gray);
+    transition: 0.5s ease-out;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card img {
+    width: 90%;
+}
+   
+.card-details {
+    gap: .5em;
+}
+
+
+.card-button {
+    transform: translate(-50%, 125%);
+    width: 60%;
+    border-radius: 1rem;
+    border: none;
+    background-color: var(--primary);
+    color: var(--accent);
+    padding: .5rem 1rem;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    opacity: 0;
+    transition: 0.3s ease-out;
+}
+
+.text-body {
+    font-size: 2rem;
+}
+
+/*Text*/
+.text-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/*Hover*/
+.card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 18px 0 var(--gray);
+}
+
+.card:hover .card-button {
+    transform: translate(-50%, 50%);
+    opacity: 1;
+}
+
+.card-button:hover {
+    background-color: var(--primaryHover);
+}
+
+.card__container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 3rem;
+    padding: 0 3rem;
+}
+
+a:hover {
+    color: var(--primary);
+}
+
+.character__header {
+    display: flex;
+    gap: 2rem;
+}
+
+img {
+    border-radius: 10px;
+}
+
 footer {
     grid-area: 3 / 1 / 4 / 2;
+
+    background-color: var(--primary);
+    color: var(--accent);
+    border-radius: 10px 10px 0 0;
 }

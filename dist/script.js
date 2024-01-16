@@ -272,4 +272,4 @@ function showOrigin(e) {
         }
     });
 }
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=script.js.map

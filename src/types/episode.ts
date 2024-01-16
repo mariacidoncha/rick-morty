@@ -1,4 +1,4 @@
-export interface API {
+export interface APIEpisode {
     info:    Info;
     results: Episode[];
 }
