@@ -24,6 +24,7 @@ async function APIFetch<T>(url : string): Promise<T> {
     }
 }
 
+// This function returns an array with all seasons name
 async function getSeasons(): Promise<string[]> {
     try {
         let episodes = await getEpisodes();
@@ -41,6 +42,7 @@ async function getSeasons(): Promise<string[]> {
     }
 }
 
+// This function returns an array with all the episodes
 async function getEpisodes (): Promise<type.Episode[]> {
     try {
         let page = await APIFetch<type.APIEpisode>(RMUrl);
@@ -57,10 +59,12 @@ async function getEpisodes (): Promise<type.Episode[]> {
     }
 }
 
+// This function empties element
 function cleanSection (element:HTMLElement) {
     element.innerHTML='';
 }
 
+// This function sets de side bar menu on the home page
 async function setSidebar() {
     try {
         const { navUl } = elements;
@@ -93,6 +97,7 @@ async function setSidebar() {
     }
 }
 
+// This function prints season buttons on the main section
 async function showSeasons() {
     try {
         const { mainSection } = elements;
@@ -109,6 +114,7 @@ async function showSeasons() {
     }
 }
 
+// This function creates a card with an optional image, title, body and button
 function createCard (title:string, body:string, button:string, img?:string[]): HTMLElement {
     const card = document.createElement('article');
     card.classList.add('myCard');
@@ -131,6 +137,7 @@ function createCard (title:string, body:string, button:string, img?:string[]): H
     return card;
 }
 
+// This function prints cards with episodes' info
 async function showEpisodes(e: MouseEvent) {
     try {
         const target = e.target as HTMLButtonElement;
@@ -158,6 +165,7 @@ async function showEpisodes(e: MouseEvent) {
     
 }
 
+// This function prints the episode information on the main section
 async function showEpisodeInfo (e: MouseEvent) {
     try {
         const { mainSection } = elements;
@@ -188,6 +196,7 @@ async function showEpisodeInfo (e: MouseEvent) {
     }
 }
 
+// This function prints the character information on the main section
 async function showCharacterInfo(e: MouseEvent) {
     try {
         const { mainSection } = elements;
@@ -212,7 +221,7 @@ async function showCharacterInfo(e: MouseEvent) {
         document.getElementById('toHomePage__btn')?.addEventListener('click', showSeasons);
         if(character.origin.name != type.Unknown.Origin){
             document.getElementById(`${character.origin.name}_a`)?.setAttribute('href', '#');
-            document.getElementById(`${character.origin.name}_a`)?.addEventListener('click', showOrigin);
+            document.getElementById(`${character.origin.name}_a`)?.addEventListener('click', showOriginInfo);
         }
         const episodesSection = `<h2> Episodes where ${character.name} appears: ${character.episode.length} </h2>
         <section class="card__container">
@@ -230,7 +239,8 @@ async function showCharacterInfo(e: MouseEvent) {
     
 }
 
-async function showOrigin (e: MouseEvent) {
+// This function prints the location information on the main section
+async function showOriginInfo (e: MouseEvent) {
     try {
         const { mainSection } = elements;
         mainSection.innerHTML = '';
@@ -259,6 +269,6 @@ async function showOrigin (e: MouseEvent) {
             document.getElementById(`${characterData.id}_btn_character`)?.addEventListener('click', showCharacterInfo);
         });
     } catch (error) {
-        throw new Error('error en showOrigin');
+        throw new Error('error en showOriginInfo');
     }
 }

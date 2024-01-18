@@ -228,7 +228,7 @@ function showCharacterInfo(e) {
             (_a = document.getElementById('toHomePage__btn')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', showSeasons);
             if (character.origin.name != type.Unknown.Origin) {
                 (_b = document.getElementById(`${character.origin.name}_a`)) === null || _b === void 0 ? void 0 : _b.setAttribute('href', '#');
-                (_c = document.getElementById(`${character.origin.name}_a`)) === null || _c === void 0 ? void 0 : _c.addEventListener('click', showOrigin);
+                (_c = document.getElementById(`${character.origin.name}_a`)) === null || _c === void 0 ? void 0 : _c.addEventListener('click', showOriginInfo);
             }
             const episodesSection = `<h2> Episodes where ${character.name} appears: ${character.episode.length} </h2>
         <section class="card__container">
@@ -247,7 +247,7 @@ function showCharacterInfo(e) {
         }
     });
 }
-function showOrigin(e) {
+function showOriginInfo(e) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -280,7 +280,7 @@ function showOrigin(e) {
             }));
         }
         catch (error) {
-            throw new Error('error en showOrigin');
+            throw new Error('error en showOriginInfo');
         }
     });
 }

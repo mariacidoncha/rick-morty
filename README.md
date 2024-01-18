@@ -39,6 +39,9 @@ Day 4: 17/01/2024
 - Investigate what is pagination in api rest
 - Add enum interface 'UNKNOWN'
 
+Day 5: 18/01/2024
+- Refactor and clean code
+
 # ISSUES
 #### 1. Export/Import statement doesn't work
     Change tsconfig.json:
