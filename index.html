@@ -1,5 +1,8 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rick and Morty</title>
 
     <!-- favicon -->
@@ -16,15 +19,18 @@
 </head>
 <body>
 
-    <header>
+    <header id="header">
         <img src="./assets/rick_header.png" alt="Rick and Morty icon">
         <h1>Rick and Morty</h1>
 
     </header>
 
     <main>
-        <nav id="sidebarMenu" class="position-sticky sidebar accordion accordion-flush">
-            <h3>Episodes</h3>
+        <nav class="position-sticky sidebar accordion accordion-flush">
+            <h2>Episodes</h2>
+            <ul id="nav__list">
+
+            </ul>
         </nav>
         <section id="main__container" class="main__container">
 
@@ -42,7 +48,7 @@
         <section class="footer__section">
             <ul>
                 <li>
-                    <h5>Go to</h5>
+                    <p class="footer__header">Go to</p>
                 </li>
                 <li><a href="#">Seasons</a></li>
                 <li><a href="#">Episodes</a></li>

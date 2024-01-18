@@ -1,4 +1,8 @@
 @import './reset.css';
 @import './fonts.css';
-@import './home.css';
 @import './colors.css';
+@import './home.css';
+@import './general.css';
+@import './sideBar.css';
+@import './card.css';
+@import './footer.css';

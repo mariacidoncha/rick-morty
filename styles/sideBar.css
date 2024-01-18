@@ -1,0 +1,55 @@
+.sidebar {
+    padding-top: 3rem;
+    max-height: 50rem;
+    overflow-y:auto;
+    scroll-snap-type: y mandatory;
+}
+
+.sidebar > h2 {
+    font-family: 'RickMorty';
+    font-size: 4rem;
+    color: var(--primary);
+    text-shadow: 0.1rem 0 0.2rem var(--accent), 0.2rem 0.1rem 0.2rem var(--secondary), -0.1rem 0 0.2rem var(--accent), -0.2rem 0.1rem 0.2rem var(--secondary), 0 0.1rem 0.2rem var(--accent), 0.1rem 0.2rem 0.2rem var(--secondary), 0 -0.1rem 0.2rem var(--accent), 0.1rem -0.2rem 0.2rem var(--secondary),
+               0.1rem 0.1rem 0.2rem var(--accent), 0.2rem 0.2rem 0.2rem var(--secondary), -0.1rem -0.1rem 0.2rem var(--accent), -0.2rem -0.2rem 0.2rem var(--secondary), 0.1rem -0.1rem 0.2rem var(--accent), 0.2rem -0.2rem 0.2rem var(--secondary), -0.1rem 0.1rem 0.2rem var(--accent), -0.2rem 0.2rem 0.2rem var(--secondary);
+    text-align: center;
+}
+
+.sidebar a {
+    text-decoration: none;
+}
+
+/* scroll side bar */
+/* Works on Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) var(--primary);
+}
+  
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 1.2rem;
+}
+
+*::-webkit-scrollbar-track {
+    border-radius: 20px;
+    background: var(--primary);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 20px;
+}
+
+.accordion-button {
+    font-size: 2rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--accent);
+    color: var(--primary);
+}
+
+.accordion-button:focus {
+    border-color: transparent;
+    box-shadow: none;
+}

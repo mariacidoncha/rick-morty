@@ -3,12 +3,15 @@ import {elements} from './domElements.js'
 
 const RMUrl = 'https://rickandmortyapi.com/api/episode';
 
+document.addEventListener('DOMContentLoaded', main);
+
 // This function sets home page
 async function main() {
-    showSidebar();
+    const { header } = elements;
+    header.addEventListener('click', showSeasons);
+    setSidebar();
     showSeasons();
 }
-main();
 
 // This function returns a promise
 async function APIFetch<T>(url : string): Promise<T> {
@@ -24,11 +27,11 @@ async function APIFetch<T>(url : string): Promise<T> {
 async function getSeasons(): Promise<string[]> {
     try {
         let episodes = await getEpisodes();
-        let seasons: string[] = [episodes[0].episode.split('E')[0]];
+        let seasons: string[] = [episodes[0].episode.split('S')[1].split('E')[0]];
         
         episodes.forEach( (episode) => {
-            if(!seasons.includes(episode.episode.split('E')[0])){
-                seasons.push(episode.episode.split('E')[0]);
+            if(!seasons.includes(episode.episode.split('S')[1].split('E')[0])){
+                seasons.push(episode.episode.split('S')[1].split('E')[0]);
             }
         });
         
@@ -54,44 +57,31 @@ async function getEpisodes (): Promise<type.Episode[]> {
     }
 }
 
-async function getLocation (url:string): Promise<type.Place> {
-    try {
-        let page = await APIFetch<type.Place>(url);
-    
-        return page;
-    } catch (error) {
-        throw new Error(`Something is wrong ${error}`);
-    }
+function cleanSection (element:HTMLElement) {
+    element.innerHTML='';
 }
 
-async function getData (url:string) {
-    
-}
-
-async function showSidebar() {
+async function setSidebar() {
     try {
-        const { sidebarMenu } = elements;
+        const { navUl } = elements;
         let episodes = await getEpisodes();
         let seasons = await getSeasons();
         
         seasons.forEach( (season) => {
             const seasonNav = `
-            <div class="accordion-item">
-            <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne${season}" aria-expanded="false" aria-controls="flush-collapseOne">
-            Season ${season}
-            </button>
-            </h2>
-            <div id="flush-collapseOne${season}" class="overflow-y-scroll accordion-collapse collapse" data-bs-parent="#sidebarMenu">
-            
-            </div>
-            </div>
+            <li class="accordion-item">
+                <button class="accordion-header accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne${season}" aria-expanded="false" aria-controls="flush-collapseOne">
+                Season ${season}
+                </button>
+                <ul id="flush-collapseOne${season}" class="overflow-y-scroll accordion-collapse collapse" data-bs-parent="#sidebarMenu">
+                </ul>
+            </li>
             `;
-            sidebarMenu.insertAdjacentHTML('beforeend', seasonNav);
+            navUl.insertAdjacentHTML('beforeend', seasonNav);
             episodes.forEach( (episode) => {
-                if(episode.episode.startsWith(season)){
+                if(episode.episode.split('S')[1].startsWith(season)){
                     const episodeItem = ` 
-                    <a id="${episode.id}_a_episode" class="accordion-body">${episode.episode}: ${episode.name}</a>
+                    <li><a id="${episode.id}_a_episode" class="accordion-body">${episode.episode}: ${episode.name}</a></li>
                     `;
                     document.getElementById(`flush-collapseOne${season}`)?.insertAdjacentHTML('beforeend',episodeItem);
                     document.getElementById(`${episode.id}_a_episode`)?.addEventListener('click', showEpisodeInfo);
@@ -106,11 +96,11 @@ async function showSidebar() {
 async function showSeasons() {
     try {
         const { mainSection } = elements;
-        mainSection.innerHTML = '';
+        cleanSection(mainSection);
         const seasons = await getSeasons();
         
         seasons.forEach( (season) => {
-            const seasonBtn = `<button id="main__btn${season}" class="episode__btn">Season ${season}</button>`;
+            const seasonBtn = `<button id="main__btn${season}" class="episode__btn" season="${season}">Season ${season}</button>`;
             mainSection.insertAdjacentHTML('beforeend', seasonBtn);
             document.getElementById(`main__btn${season}`)?.addEventListener('click', showEpisodes);
         });
@@ -119,34 +109,47 @@ async function showSeasons() {
     }
 }
 
+function createCard (title:string, body:string, button:string, img?:string[]): HTMLElement {
+    const card = document.createElement('article');
+    card.classList.add('myCard');
+    if(typeof img !== 'undefined'){
+        const cardImg = document.createElement('img');
+        cardImg.src = img[0];
+        cardImg.title = img[1];
+        card.appendChild(cardImg);
+    }
+    const details = `
+    <div class="card-details">
+        <p class="text-title">${title}</p>
+        <hr>
+        <p class="text-body">${body}</p>
+    </div>
+    <button id="${button}" class="card-button">Episode info</button>
+    `;
+    card.insertAdjacentHTML('beforeend', details);
+
+    return card;
+}
+
 async function showEpisodes(e: MouseEvent) {
     try {
         const target = e.target as HTMLButtonElement;
-        const season = target.id.split('S')[1];
+        const season = target.getAttribute('season');
         const episodes = (await getEpisodes()).filter( (episode) => {
             return episode.episode.split('S')[1].split('E')[0] === season;
         });
         const { mainSection } = elements;
         mainSection.innerHTML = '';
         const header = `
-        <button id="toHomePage__btn" class="toHomePage__btn">Home</button>
-        <h2> Season ${season} </h2>
-        <section class="card__container"></section>
-        `
+            <button id="toHomePage__btn" class="toHomePage__btn">Home</button>
+            <h2> Season ${season} </h2>
+            <section class="card__container"></section>
+        `;
         mainSection.insertAdjacentHTML('beforeend', header);
         document.getElementById('toHomePage__btn')?.addEventListener('click', showSeasons);
         episodes.forEach( (episode) => {
-            const episodeCard = ` 
-            <article class="myCard">
-                <div class="card-details">
-                    <p class="text-title">${episode.episode}: ${episode.name}</p>
-                    <hr>
-                    <p class="text-body">${episode.air_date}</p>
-                </div>
-                <button id="${episode.id}_btn_episode" class="card-button">Episode info</button>
-            </article>
-            `
-            mainSection.children[mainSection.children.length - 1].insertAdjacentHTML('beforeend', episodeCard);
+            const episodeCard = createCard(`${episode.episode}: ${episode.name}`, `${episode.air_date}`, `${episode.id}_btn_episode`);
+            mainSection.children[mainSection.children.length - 1].insertAdjacentElement('beforeend', episodeCard);
             document.getElementById(`${episode.id}_btn_episode`)?.addEventListener('click', showEpisodeInfo);
         });
     } catch (error) {
@@ -158,34 +161,24 @@ async function showEpisodes(e: MouseEvent) {
 async function showEpisodeInfo (e: MouseEvent) {
     try {
         const { mainSection } = elements;
-        mainSection.innerHTML = '';
+        cleanSection(mainSection);
         const target = e.target as HTMLButtonElement;
         const episodeId = target.id.split('_')[0];
         const episode = (await getEpisodes()).find((e) => e.id.toString() === episodeId);
-        const season = episode?.episode.split('E')[0];
+        const season = episode?.episode.split('S')[1].split('E')[0];
         const header = `
-            <button id="to__btn${season}" class="toHomePage__btn">Back season</button>
+            <button id="to__btn${season}" class="toHomePage__btn" season="${season}">Back season</button>
             <h2>${episode?.episode}: ${episode?.name} </h2>
-            <h3>${episode?.air_date}</h3>
+            <p class="header__info">${episode?.air_date}</p>
             <section class="card__container"></section>
         `;
         const characters = episode?.characters;
         characters?.forEach( async (character) => {
-            const info = await APIFetch<type.Character>(character);
-            info.status = info.status === 'unknown'? info.status = type.Unknown.Status : info.status;      
-            const characterCard = ` 
-            <article class="myCard">
-            <img src="${info.image}" title="${info.name} image">
-            <div class="card-details">
-                <p class="text-title">${info.name}</p>
-                    <hr>
-                    <p class="text-body">${info.status} | ${info.species}</p>
-                </div>
-                <button id="${info.id}_btn_character" class="card-button">Character info</button>
-            </article>
-            `;
-            mainSection.children[mainSection.children.length - 1].insertAdjacentHTML('beforeend', characterCard);
-            document.getElementById(`${info.id}_btn_character`)?.addEventListener('click', showCharacterInfo);
+            const characterData = await APIFetch<type.Character>(character);
+            characterData.status = characterData.status === 'unknown'? characterData.status = type.Unknown.Status : characterData.status;      
+            const characterCard = createCard(`${characterData.name}`, `${characterData.status} | ${characterData.species}`, `${characterData.id}_btn_character`, [`${characterData.image}`, `${characterData.name} image`]);
+            mainSection.children[mainSection.children.length - 1].insertAdjacentElement('beforeend', characterCard);
+            document.getElementById(`${characterData.id}_btn_character`)?.addEventListener('click', showCharacterInfo);
     
         });
         mainSection.insertAdjacentHTML('beforeend', header);
@@ -211,7 +204,7 @@ async function showCharacterInfo(e: MouseEvent) {
             <section>
                 <button id="toHomePage__btn" class="toHomePage__btn">Home</button>
                 <h2> ${character.name} </h2>
-                <h3> ${character.status} | ${character.species} | ${character.gender} | <a id="${character.origin.name}_a" url=${character.origin.url} title="${character.name} origin page">${character.origin.name}</a></h3>
+                <p class="header__info"> ${character.status} | ${character.species} | ${character.gender} | <a id="${character.origin.name}_a" url=${character.origin.url} title="${character.name} origin page">${character.origin.name}</a></p>
             </section>
         </section>
         `;
@@ -227,17 +220,8 @@ async function showCharacterInfo(e: MouseEvent) {
         mainSection.insertAdjacentHTML('beforeend', episodesSection);
         character.episode.forEach( async (episode) => {
             const tempEpisode = (await getEpisodes()).find((e) => e.url === episode);
-            const episodeCard = `
-            <article class="myCard">
-                <div class="card-details">
-                    <p class="text-title">${tempEpisode?.episode}: ${tempEpisode?.name}</p>
-                    <hr>
-                    <p class="text-body">${tempEpisode?.air_date}</p>
-                </div>
-                <button id="${tempEpisode?.id}_btn_episode" class="card-button">Episode info</button>
-            </article>
-            `
-            mainSection.children[mainSection.children.length - 1].insertAdjacentHTML('beforeend', episodeCard);
+            const episodeCard = createCard(`${tempEpisode?.episode}: ${tempEpisode?.name}`, `${tempEpisode?.air_date}`, `${tempEpisode?.id}_btn_episode`);
+            mainSection.children[mainSection.children.length - 1].insertAdjacentElement('beforeend', episodeCard);
             document.getElementById(`${tempEpisode?.id}_btn_episode`)?.addEventListener('click', showEpisodeInfo);
         });        
     } catch (error) {
@@ -253,12 +237,12 @@ async function showOrigin (e: MouseEvent) {
         const target = e.target as HTMLButtonElement;
         const originId = target.id.split('_')[0];
         const originUrl = target.getAttribute('url')!;
-        const location = await getLocation(originUrl);
+        let location = await APIFetch<type.Place>(originUrl);
         location.dimension = location.dimension === 'unknown'? type.Unknown.Dimension : location.dimension;
         const header = `
                 <button id="toHomePage__btn" class="toHomePage__btn">Home</button>
                 <h2> ${location.name} </h2>
-                <h3> ${location.type} | ${location.dimension}</h3>
+                <p class="header__info"> ${location.type} | ${location.dimension}</p>
         `;
         mainSection.insertAdjacentHTML('beforeend', header);
         document.getElementById('toHomePage__btn')?.addEventListener('click', showSeasons);
@@ -268,21 +252,11 @@ async function showOrigin (e: MouseEvent) {
         mainSection.insertAdjacentHTML('beforeend', residentsSection);
         let characters = location.residents;
         characters.forEach( async (character) => {
-            const info = await APIFetch<type.Character>(character);
-            info.status = info.status === 'unknown'? type.Unknown.Status : info.status;
-            const characterCard = ` 
-            <article class="myCard">
-            <img src="${info.image}" title="${info.name} image">
-            <div class="card-details">
-                <p class="text-title">${info.name}</p>
-                    <hr>
-                    <p class="text-body">${info.status} | ${info.species}</p>
-                </div>
-                <button id="${info.id}_btn_character" class="card-button">Character info</button>
-            </article>
-            `;
-            mainSection.children[mainSection.children.length - 1].insertAdjacentHTML('beforeend', characterCard);
-            document.getElementById(`${info.id}_btn_character`)?.addEventListener('click', showCharacterInfo);
+            const characterData = await APIFetch<type.Character>(character);
+            characterData.status = characterData.status === 'unknown'? type.Unknown.Status : characterData.status;
+            const characterCard = createCard(`${characterData.name}`, `${characterData.status} | ${characterData.species}`, `${characterData.id}_btn_character`, [`${characterData.image}`, `${characterData.name} image`]);
+            mainSection.children[mainSection.children.length - 1].insertAdjacentElement('beforeend', characterCard);
+            document.getElementById(`${characterData.id}_btn_character`)?.addEventListener('click', showCharacterInfo);
         });
     } catch (error) {
         throw new Error('error en showOrigin');
