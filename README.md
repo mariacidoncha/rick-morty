@@ -53,7 +53,7 @@ Day 5: 18/01/2024
 ## 1. Export/Import statement doesn't work
 
     Change tsconfig.json:
-    "target": "ES6" and "module": "ES6"- [DAILY RECORDS](#daily-records)
+    "target": "ES6" and "module": "ES6"
 
 ## 2. Origin: unknown
 

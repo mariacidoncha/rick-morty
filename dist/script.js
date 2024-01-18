@@ -12,12 +12,10 @@ import { elements } from './domElements.js';
 const RMUrl = 'https://rickandmortyapi.com/api/episode';
 document.addEventListener('DOMContentLoaded', main);
 function main() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { header } = elements;
-        header.addEventListener('click', showSeasons);
-        setSidebar();
-        showSeasons();
-    });
+    const { header } = elements;
+    header.addEventListener('click', showSeasons);
+    setSidebar();
+    showSeasons();
 }
 function APIFetch(url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -76,9 +74,11 @@ function setSidebar() {
             seasons.forEach((season) => {
                 const seasonNav = `
             <li class="accordion-item">
-                <button class="accordion-header accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne${season}" aria-expanded="false" aria-controls="flush-collapseOne">
+            <div class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne${season}" aria-expanded="false" aria-controls="flush-collapseOne">
                 Season ${season}
                 </button>
+                </div>
                 <ul id="flush-collapseOne${season}" class="overflow-y-scroll accordion-collapse collapse" data-bs-parent="#sidebarMenu">
                 </ul>
             </li>
