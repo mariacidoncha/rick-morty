@@ -38,6 +38,7 @@ function getSeasons() {
                 if (!seasons.includes(episode.episode.split('S')[1].split('E')[0])) {
                     seasons.push(episode.episode.split('S')[1].split('E')[0]);
                 }
+                ;
             });
             return seasons;
         }
@@ -55,6 +56,7 @@ function getEpisodes() {
                 page = yield APIFetch(page.info.next);
                 episodes.push(...page.results);
             }
+            ;
             return episodes;
         }
         catch (error) {
@@ -93,6 +95,7 @@ function setSidebar() {
                         (_a = document.getElementById(`flush-collapseOne${season}`)) === null || _a === void 0 ? void 0 : _a.insertAdjacentHTML('beforeend', episodeItem);
                         (_b = document.getElementById(`${episode.id}_a_episode`)) === null || _b === void 0 ? void 0 : _b.addEventListener('click', showEpisodeInfo);
                     }
+                    ;
                 });
             });
         }

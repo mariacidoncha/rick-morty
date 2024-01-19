@@ -1,12 +1,12 @@
 import * as type from './types/interfaces.js';
-import {elements} from './domElements.js'
+import {elements} from './domElements.js';
 
 const RMUrl = 'https://rickandmortyapi.com/api/episode';
 
 document.addEventListener('DOMContentLoaded', main);
 
 // This function sets home page
-function main() {
+function main(): void {
     const { header } = elements;
     header.addEventListener('click', showSeasons);
     setSidebar();
@@ -33,7 +33,7 @@ async function getSeasons(): Promise<string[]> {
         episodes.forEach( (episode) => {
             if(!seasons.includes(episode.episode.split('S')[1].split('E')[0])){
                 seasons.push(episode.episode.split('S')[1].split('E')[0]);
-            }
+            };
         });
         
         return seasons;
@@ -51,7 +51,7 @@ async function getEpisodes (): Promise<type.Episode[]> {
         while(page.info.next){
             page = await APIFetch<type.APIEpisode>(page.info.next);
             episodes.push(...page.results);
-        }
+        };
         
         return episodes;
     } catch (error) {
@@ -60,12 +60,12 @@ async function getEpisodes (): Promise<type.Episode[]> {
 }
 
 // This function empties element
-function cleanSection (element:HTMLElement) {
+function cleanSection (element:HTMLElement): void {
     element.innerHTML='';
 }
 
 // This function sets de side bar menu on the home page
-async function setSidebar() {
+async function setSidebar(): Promise<void> {
     try {
         const { navUl } = elements;
         let episodes = await getEpisodes();
@@ -91,7 +91,7 @@ async function setSidebar() {
                     `;
                     document.getElementById(`flush-collapseOne${season}`)?.insertAdjacentHTML('beforeend',episodeItem);
                     document.getElementById(`${episode.id}_a_episode`)?.addEventListener('click', showEpisodeInfo);
-                }
+                };
             });
         });
     } catch (error) {
@@ -100,7 +100,7 @@ async function setSidebar() {
 }
 
 // This function prints season buttons on the main section
-async function showSeasons() {
+async function showSeasons(): Promise<void> {
     try {
         const { mainSection } = elements;
         cleanSection(mainSection);
@@ -140,7 +140,7 @@ function createCard (title:string, body:string, button:string, img?:string[]): H
 }
 
 // This function prints cards with episodes' info
-async function showEpisodes(e: MouseEvent) {
+async function showEpisodes(e: MouseEvent): Promise<void> {
     try {
         const target = e.target as HTMLButtonElement;
         const season = target.getAttribute('season');
@@ -168,7 +168,7 @@ async function showEpisodes(e: MouseEvent) {
 }
 
 // This function prints the episode information on the main section
-async function showEpisodeInfo (e: MouseEvent) {
+async function showEpisodeInfo (e: MouseEvent): Promise<void> {
     try {
         const { mainSection } = elements;
         cleanSection(mainSection);
@@ -199,7 +199,7 @@ async function showEpisodeInfo (e: MouseEvent) {
 }
 
 // This function prints the character information on the main section
-async function showCharacterInfo(e: MouseEvent) {
+async function showCharacterInfo(e: MouseEvent): Promise<void> {
     try {
         const { mainSection } = elements;
         mainSection.innerHTML = '';
@@ -242,7 +242,7 @@ async function showCharacterInfo(e: MouseEvent) {
 }
 
 // This function prints the location information on the main section
-async function showOriginInfo (e: MouseEvent) {
+async function showOriginInfo (e: MouseEvent): Promise<void> {
     try {
         const { mainSection } = elements;
         mainSection.innerHTML = '';

@@ -1,15 +1,25 @@
+
 - [PROJECT DETAILS](#project-details)
+- [HOW TO USE THE API](#how-to-use-the-api)
 - [DAILY RECORDS](#daily-records)
 - [ISSUES](#issues)
   - [1. Export/Import statement doesn't work](#1-exportimport-statement-doesnt-work)
   - [2. Origin: unknown](#2-origin-unknown)
   - [3. Bootstrap classes](#3-bootstrap-classes)
 
-# PROJECT DETAILS
+## PROJECT DETAILS
 
 Individual project 2 - AIT
 
-# DAILY RECORDS
+In this project I created my own website for the famous television series Rick and Morty.
+All the information to display on the page must be consumed by a third-party API: <https://rickandmortyapi.com/api>.
+
+## HOW TO USE THE API
+
+Rick anda Morty API has an end point for episodes, characters and locations.
+This API has an unique endpoint for each episode, character and location.
+
+## DAILY RECORDS
 
 Day 1: 12/01/2024
 
@@ -48,14 +58,18 @@ Day 5: 18/01/2024
 
 - Refactor and clean code
 
-# ISSUES
+Day 6: 19/01/2024
 
-## 1. Export/Import statement doesn't work
+- Add responsive design
+
+## ISSUES
+
+### 1. Export/Import statement doesn't work
 
     Change tsconfig.json:
     "target": "ES6" and "module": "ES6"
 
-## 2. Origin: unknown
+### 2. Origin: unknown
 
       If I try to display info about origin: unknown I will get an error.
       I fix this with:
@@ -64,7 +78,7 @@ Day 5: 18/01/2024
       }
       Add the event listener only if the origin is not unknown
 
-## 3. Bootstrap classes
+### 3. Bootstrap classes
 
       Fix card__container S01S05 is bigger.
       My class 'card' was mixed with the bootstrap 'card' class.
