@@ -1,8 +1,6 @@
 import * as type from './types/interfaces.js';
 import {elements} from './domElements.js';
 
-const RMUrl = 'https://rickandmortyapi.com/api/episode';
-
 document.addEventListener('DOMContentLoaded', main);
 
 // This function sets home page
@@ -20,7 +18,7 @@ async function APIFetch<T>(url : string): Promise<T> {
         const JSONResponse = await response.json();
         return JSONResponse;
     } catch (error) {
-        throw new Error(`Something is wrong ${error}`);
+        throw new Error(`Something is wrong in f APIFetch: ${error}`);
     }
 }
 
@@ -38,14 +36,14 @@ async function getSeasons(): Promise<string[]> {
         
         return seasons;
     } catch (error) {
-        throw new Error(`Something is wrong ${error}`);
+        throw new Error(`Something is wrong in f getSeasons: ${error}`);
     }
 }
 
 // This function returns an array with all the episodes
 async function getEpisodes (): Promise<type.Episode[]> {
     try {
-        let page = await APIFetch<type.APIEpisode>(RMUrl);
+        let page = await APIFetch<type.APIEpisode>('https://rickandmortyapi.com/api/episode');
         let episodes = page.results;
         
         while(page.info.next){
@@ -55,7 +53,7 @@ async function getEpisodes (): Promise<type.Episode[]> {
         
         return episodes;
     } catch (error) {
-        throw new Error(`Something is wrong ${error}`);
+        throw new Error(`Something is wrong in f getEpisodes: ${error}`);
     }
 }
 
@@ -95,7 +93,7 @@ async function setSidebar(): Promise<void> {
             });
         });
     } catch (error) {
-        throw new Error(`Something is wrong ${error}`);
+        throw new Error(`Something is wrong in f setSidebar: ${error}`);
     }
 }
 
@@ -112,29 +110,46 @@ async function showSeasons(): Promise<void> {
             document.getElementById(`main__btn${season}`)?.addEventListener('click', showEpisodes);
         });
     } catch (error) {
-        throw new Error(`Something is wrong ${error}`);
+        throw new Error(`Something is wrong in f showSeasons: ${error}`);
     }
 }
 
-// This function creates a card with an optional image, title, body and button
-function createCard (title:string, body:string, button:string, img?:string[]): HTMLElement {
+// This function creates a card
+function createCard(details: string) {
     const card = document.createElement('article');
     card.classList.add('myCard');
-    if(typeof img !== 'undefined'){
-        const cardImg = document.createElement('img');
-        cardImg.src = img[0];
-        cardImg.title = img[1];
-        card.appendChild(cardImg);
-    }
+    card.insertAdjacentHTML('beforeend', details);
+    return card;
+}
+
+// This function sets episode code
+function createEpisodeCard (title:string, body:string, button:string): HTMLElement {
     const details = `
     <div class="card-details">
-        <p class="text-title">${title}</p>
-        <hr>
-        <p class="text-body">${body}</p>
+    <p class="text-title">${title}</p>
+    <hr>
+    <p class="text-body">${body}</p>
     </div>
     <button id="${button}" class="card-button">Episode info</button>
     `;
-    card.insertAdjacentHTML('beforeend', details);
+    const card = createCard(details);
+
+    return card;
+}
+
+// This function sets character code
+function createCharacterCard (title:string, body:string, button:string, img:string[]): HTMLElement {
+    
+    const details = `
+    <img src=${img[0]} title=${img[1]}>
+    <div class="card-details">
+    <p class="text-title">${title}</p>
+    <hr>
+    <p class="text-body">${body}</p>
+    </div>
+    <button id="${button}" class="card-button">Episode info</button>
+    `;
+    const card = createCard(details); 
 
     return card;
 }
@@ -157,12 +172,12 @@ async function showEpisodes(e: MouseEvent): Promise<void> {
         mainSection.insertAdjacentHTML('beforeend', header);
         document.getElementById('toHomePage__btn')?.addEventListener('click', showSeasons);
         episodes.forEach( (episode) => {
-            const episodeCard = createCard(`${episode.episode}: ${episode.name}`, `${episode.air_date}`, `${episode.id}_btn_episode`);
+            const episodeCard = createEpisodeCard(`${episode.episode}: ${episode.name}`, `${episode.air_date}`, `${episode.id}_btn_episode`);
             mainSection.children[mainSection.children.length - 1].insertAdjacentElement('beforeend', episodeCard);
             document.getElementById(`${episode.id}_btn_episode`)?.addEventListener('click', showEpisodeInfo);
         });
     } catch (error) {
-        throw new Error(`Something is wrong ${error}`);
+        throw new Error(`Something is wrong in f showEpisodes: ${error}`);
     }
     
 }
@@ -186,7 +201,7 @@ async function showEpisodeInfo (e: MouseEvent): Promise<void> {
         characters?.forEach( async (character) => {
             const characterData = await APIFetch<type.Character>(character);
             characterData.status = characterData.status === 'unknown'? characterData.status = type.Unknown.Status : characterData.status;      
-            const characterCard = createCard(`${characterData.name}`, `${characterData.status} | ${characterData.species}`, `${characterData.id}_btn_character`, [`${characterData.image}`, `${characterData.name} image`]);
+            const characterCard = createCharacterCard(`${characterData.name}`, `${characterData.status} | ${characterData.species}`, `${characterData.id}_btn_character`, [`${characterData.image}`, `${characterData.name} image`]);
             mainSection.children[mainSection.children.length - 1].insertAdjacentElement('beforeend', characterCard);
             document.getElementById(`${characterData.id}_btn_character`)?.addEventListener('click', showCharacterInfo);
     
@@ -194,7 +209,7 @@ async function showEpisodeInfo (e: MouseEvent): Promise<void> {
         mainSection.insertAdjacentHTML('beforeend', header);
         document.getElementById(`to__btn${season}`)?.addEventListener('click', showEpisodes);
     } catch (error) {
-        throw new Error(`Something is wrong ${error}`);
+        throw new Error(`Something is wrong in f showEpisodeInfo: ${error}`);
     }
 }
 
@@ -202,7 +217,7 @@ async function showEpisodeInfo (e: MouseEvent): Promise<void> {
 async function showCharacterInfo(e: MouseEvent): Promise<void> {
     try {
         const { mainSection } = elements;
-        mainSection.innerHTML = '';
+        cleanSection(mainSection);
         const target = e.target as HTMLButtonElement;
         const characterId = target.id.split('_')[0];
         const character = await APIFetch<type.Character>(`https://rickandmortyapi.com/api/character/${characterId}`);
@@ -231,12 +246,12 @@ async function showCharacterInfo(e: MouseEvent): Promise<void> {
         mainSection.insertAdjacentHTML('beforeend', episodesSection);
         character.episode.forEach( async (episode) => {
             const tempEpisode = (await getEpisodes()).find((e) => e.url === episode);
-            const episodeCard = createCard(`${tempEpisode?.episode}: ${tempEpisode?.name}`, `${tempEpisode?.air_date}`, `${tempEpisode?.id}_btn_episode`);
+            const episodeCard = createEpisodeCard(`${tempEpisode?.episode}: ${tempEpisode?.name}`, `${tempEpisode?.air_date}`, `${tempEpisode?.id}_btn_episode`);
             mainSection.children[mainSection.children.length - 1].insertAdjacentElement('beforeend', episodeCard);
             document.getElementById(`${tempEpisode?.id}_btn_episode`)?.addEventListener('click', showEpisodeInfo);
         });        
     } catch (error) {
-        throw new Error(`Something is wrong ${error}`);
+        throw new Error(`Something is wrong in f showCharacterInfo: ${error}`);
     }
     
 }
@@ -266,11 +281,11 @@ async function showOriginInfo (e: MouseEvent): Promise<void> {
         characters.forEach( async (character) => {
             const characterData = await APIFetch<type.Character>(character);
             characterData.status = characterData.status === 'unknown'? type.Unknown.Status : characterData.status;
-            const characterCard = createCard(`${characterData.name}`, `${characterData.status} | ${characterData.species}`, `${characterData.id}_btn_character`, [`${characterData.image}`, `${characterData.name} image`]);
+            const characterCard = createCharacterCard(`${characterData.name}`, `${characterData.status} | ${characterData.species}`, `${characterData.id}_btn_character`, [`${characterData.image}`, `${characterData.name} image`]);
             mainSection.children[mainSection.children.length - 1].insertAdjacentElement('beforeend', characterCard);
             document.getElementById(`${characterData.id}_btn_character`)?.addEventListener('click', showCharacterInfo);
         });
     } catch (error) {
-        throw new Error('error en showOriginInfo');
+        throw new Error(`Something is wrong in f showOriginInfo: ${error}`);
     }
 }

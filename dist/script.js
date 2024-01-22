@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import * as type from './types/interfaces.js';
 import { elements } from './domElements.js';
-const RMUrl = 'https://rickandmortyapi.com/api/episode';
 document.addEventListener('DOMContentLoaded', main);
 function main() {
     const { header } = elements;
@@ -50,7 +49,7 @@ function getSeasons() {
 function getEpisodes() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let page = yield APIFetch(RMUrl);
+            let page = yield APIFetch('https://rickandmortyapi.com/api/episode');
             let episodes = page.results;
             while (page.info.next) {
                 page = yield APIFetch(page.info.next);
