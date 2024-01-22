@@ -260,9 +260,8 @@ async function showCharacterInfo(e: MouseEvent): Promise<void> {
 async function showOriginInfo (e: MouseEvent): Promise<void> {
     try {
         const { mainSection } = elements;
-        mainSection.innerHTML = '';
+        cleanSection(mainSection);
         const target = e.target as HTMLButtonElement;
-        const originId = target.id.split('_')[0];
         const originUrl = target.getAttribute('url')!;
         let location = await APIFetch<type.Place>(originUrl);
         location.dimension = location.dimension === 'unknown'? type.Unknown.Dimension : location.dimension;
