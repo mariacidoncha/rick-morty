@@ -28,4 +28,12 @@
         width: 30%;
     }
 
+    .character__header{
+        justify-content: space-around;
+    }
+
+    .character__header img {
+        width: 40%;
+    }
+
 }
